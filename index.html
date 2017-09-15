@@ -112,7 +112,7 @@
 	}
 	function RetrieveCatalog(scope) {
 		$(".catalog_page .row").text("");
-		var token = "00D9E0000000S7v!AQkAQBHHxrBDHm0BwLEJNipZv4SuqOc15CjwOfhcUWDL2qJHhlQNzvixHlZ0E7zoHXykP.8woNdGSfac1Puuw0bYLSy7I0OX";//getToken();
+		var token = getToken();
 		var xhttp = new XMLHttpRequest();
 		if(scope === "GAS"){
 			xhttp.open("GET", "https://cs88.salesforce.com/services/apexrest/IntegrazioneClickIren?target=&type_commodity=GAS", false);
@@ -160,7 +160,7 @@
 	
 	function contrattualizza(name,surname,cf,pod_pdr){
 		var xhttp = new XMLHttpRequest();
-		var token = "00D9E0000000S7v!AQkAQBHHxrBDHm0BwLEJNipZv4SuqOc15CjwOfhcUWDL2qJHhlQNzvixHlZ0E7zoHXykP.8woNdGSfac1Puuw0bYLSy7I0OX";//getToken();
+		var token = getToken();
 		xhttp.open("POST", "https://cs88.salesforce.com/services/data/v40.0/sobjects/Dati_Contrattualizzazione__c/", false);
 		xhttp.setRequestHeader("Content-type", "application/json");
 		xhttp.setRequestHeader("Authorization", "Bearer " + token);
