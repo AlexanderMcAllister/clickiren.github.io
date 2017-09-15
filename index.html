@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+</head>
+<body>
+
+<!--div class="catalog_result"></div!-->
+
+<div class="catalog_page">
+
+	<div style="float:left" class="col-md-4"><button type="submit" onclick="manageCatalogELE()" class="btn-default">ELE</button></div>
+	<div style="float:left" class="col-md-4"><button type="submit" onclick="manageCatalogGAS()" class="btn-default">GAS</button></div>
+    <div style="float:left" class="col-md-4"><button type="submit" onclick="manageCatalogAll()" class="btn-default">Tutti</button></div>
+
+    <div class="p-5 bg-dark text-center" style="min-height:600px">
+  
+		<div class="container">
+		  <div class="row">
+		  </div>
+		</div>
+    </div>
+</div>
+
+ <div class="purchase_page bg-dark py-5" style="min-height:600px;display:none;">
+    <div class="container">
+      <div class="row">
+        <div class="align-self-center col-md-6 text-white">
+          <h1 class="text-center text-md-left display-3">Attiva subito!</h1>
+          <p class="lead">Perchè non volere il meglio?</p>
+        </div>
+        <div class="col-md-6" id="book">
+          <div class="card">
+            <div class="card-body p-5">
+              <h3 class="pb-3">Inserisci i tuoi dati</h3>
+              <form id="purchase_form">
+                <div class="form-group"> <label>Nome</label>
+                  <input id="nameInput" class="form-control nameInput"> </div>
+                <div class="form-group"> <label>Cognome</label>
+                  <input id="surnameInput" class="form-control surnameInput"> </div>
+				<div class="form-group"> <label>Codice Fiscale</label>
+                  <input id="cfInput" type="text" class="form-control cfInput"> </div>
+                <div class="form-group"> <label>POD/PDR</label>
+                  <input id="pod_pdrInput"type="text" class="form-control"> </div>
+                
+              </form>
+			  <input type="submit" onclick="orderProduct()" class="btn mt-2 btn-outline-dark"></input>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+
+<script>
+
+	
+
+	function orderProduct(){
+		
+		var name = document.getElementById("nameInput").value;
+		var surname = document.getElementById("surnameInput").value;
+		var cf = document.getElementById("cfInput").value;
+		var pod_pdr = document.getElementById("pod_pdrInput").value;
+		contrattualizza(name,surname,cf,pod_pdr);
+		console.log("ciao:" + name + " " + surname + " " + cf + " " + pod_pdr);
+	}
+	var codicePricing = "";
+	var purchase  =function(value,object){  
+	//alert(value);
+	codicePricing=value;
+	$(".catalog_page").hide();
+	$(".purchase_page").show();
+	};     
+	
+	function appendProduct(product_type_commodity,product_name, priceBook_codiceListino){
+		$(".catalog_page .row").append("<div class=\"col-md-3\"><div class=\"card p-5 m-1\"><div class=\"card-block\"><p class=\"lead\"><i>" + product_type_commodity + "</i></p></div><div class=\"card-block my-3\"><h5><b>" + product_name + "</b></h5><hr><hr><hr><hr></div><div class=\"card-block\"><a onclick=\"purchase('" + priceBook_codiceListino + "',this)\" class=\"btn btn-secondary\">Start now</a></div></div></div>");
+	}
+	
+	function manageCatalogGAS(){
+		catalogoProdotti = RetrieveCatalog("GAS");
+		Object.keys(catalogoProdotti).forEach(function(key) {
+			console.log(key, catalogoProdotti[key]);
+			appendProduct(catalogoProdotti[key].product_type_commodity,catalogoProdotti[key].product_name, catalogoProdotti[key].priceBookEntry.priceBook_codiceListino);
+		});
+	}
+	function manageCatalogELE(){
+		catalogoProdotti = RetrieveCatalog("ELE");
+		Object.keys(catalogoProdotti).forEach(function(key) {
+			console.log(key, catalogoProdotti[key]);
+			/*
+			$(".row").append("<div class=\"col-md-3\"><div class=\"card p-5 m-1\"><div class=\"card-block\"><p class=\"lead\"><i>" + catalogoProdotti[key].product_type_commodity + "</i></p></div><div class=\"card-block my-3\"><h5><b>" + catalogoProdotti[key].product_name + "</b></h5><hr><hr><hr><hr></div><div class=\"card-block\"><a href=\"#\" class=\"btn btn-secondary\">Start now</a></div></div></div>");
+			console.log(catalogoProdotti[key]);
+			*/
+			appendProduct(catalogoProdotti[key].product_type_commodity,catalogoProdotti[key].product_name, catalogoProdotti[key].priceBookEntry.priceBook_codiceListino);
+		});
+	}
+	function manageCatalogAll(){
+		catalogoProdotti = RetrieveCatalog("All");
+		Object.keys(catalogoProdotti).forEach(function(key) {
+			console.log(key, catalogoProdotti[key]);
+			
+			appendProduct(catalogoProdotti[key].product_type_commodity,catalogoProdotti[key].product_name, catalogoProdotti[key].priceBookEntry.priceBook_codiceListino);
+		});
+	}
+	function RetrieveCatalog(scope) {
+		$(".catalog_page .row").text("");
+		var token = "00D9E0000000S7v!AQkAQBHHxrBDHm0BwLEJNipZv4SuqOc15CjwOfhcUWDL2qJHhlQNzvixHlZ0E7zoHXykP.8woNdGSfac1Puuw0bYLSy7I0OX";//getToken();
+		var xhttp = new XMLHttpRequest();
+		if(scope === "GAS"){
+			xhttp.open("GET", "https://cs88.salesforce.com/services/apexrest/IntegrazioneClickIren?target=&type_commodity=GAS", false);
+		}else{
+			if(scope === "ELE"){
+				xhttp.open("GET", "https://cs88.salesforce.com/services/apexrest/IntegrazioneClickIren?target=&type_commodity=ELE", false);
+			}else{
+				xhttp.open("GET", "https://cs88.salesforce.com/services/apexrest/IntegrazioneClickIren?target=&type_commodity=", false);
+			}
+		}
+		
+		xhttp.setRequestHeader("Content-type", "application/json");
+		xhttp.setRequestHeader("Authorization", "Bearer " + token);
+		//xhttp.setRequestHeader("Origin", "https://pippo.pippo.com");
+		//xhttp.setRequestHeader("Access-Control-Request-Headers", "Origin,Authorization,Content-type");
+		
+		//xhttp.setRequestHeader("Access-Control-Request-Origin", "https://pippo.pippo.com");
+		//xhttp.setRequestHeader("Access-Control-Allow-Origin", "https://pippo.pippo.com");
+		
+		xhttp.send();
+		var response = JSON.parse(xhttp.responseText);
+		//alert(response);
+		$(".catalog_result").text(response.result.message);
+
+		return response.catalogoProdotti;
+	}
+	
+	function getToken() {
+		var xhttp = new XMLHttpRequest();
+		xhttp.open("POST", "https://test.salesforce.com/services/oauth2/token", false);
+		xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		//xhttp.setRequestHeader("Authorization", "Bearer 00D9E0000000S7v!AQkAQNMd0vuNEv7wCcL51GGhsRMV.XQx9tGHa1sVDaY4osvfEANHatw0mRLevPEvwjQjWV0U3F4y_sfoY6X967pIdCWQuhbT");
+		//xhttp.setRequestHeader("Origin", "https://pippo.pippo.com");
+		//xhttp.setRequestHeader("Access-Control-Request-Headers", "Origin,Authorization,Content-type");
+		
+		//xhttp.setRequestHeader("Access-Control-Request-Origin", "https://pippo.pippo.com");
+		//xhttp.setRequestHeader("Access-Control-Allow-Origin", "https://pippo.pippo.com");
+		
+		xhttp.send("grant_type=password&client_secret=8245610559742033737&username=a.mc.allister@iren.dev02&password=amcallister1br71mfSeIlI4PMTaPOPkfPXY&client_id=3MVG9lcxCTdG2Vbt76OjTdSJpPZ7Z_5uGp0qDvZ51yxyC92ghKd6_ob4wa5tFWUifDEyP.sQpohHaEd2meoIO");
+		var response = JSON.parse(xhttp.responseText);
+		//alert(response);
+		//$(".catalog_result").text(response.access_token);
+		return (response.access_token);
+	}
+	
+	function contrattualizza(name,surname,cf,pod_pdr){
+		var xhttp = new XMLHttpRequest();
+		var token = "00D9E0000000S7v!AQkAQBHHxrBDHm0BwLEJNipZv4SuqOc15CjwOfhcUWDL2qJHhlQNzvixHlZ0E7zoHXykP.8woNdGSfac1Puuw0bYLSy7I0OX";//getToken();
+		xhttp.open("POST", "https://cs88.salesforce.com/services/data/v40.0/sobjects/Dati_Contrattualizzazione__c/", false);
+		xhttp.setRequestHeader("Content-type", "application/json");
+		xhttp.setRequestHeader("Authorization", "Bearer " + token);
+		//xhttp.setRequestHeader("Origin", "https://pippo.pippo.com");
+		//xhttp.setRequestHeader("Access-Control-Request-Headers", "Origin,Authorization,Content-type");
+		
+		//xhttp.setRequestHeader("Access-Control-Request-Origin", "https://pippo.pippo.com");
+		//xhttp.setRequestHeader("Access-Control-Allow-Origin", "https://pippo.pippo.com");
+		
+		xhttp.send("{\r\n\t\"Account_FirstName__c\" : \""+name+"\",\r\n\t\"Account_LastName__c\" : \""+surname+"\",\r\n\t\"Bolletta_Online__c\" : \"true\",\r\n\t\"Account_type__c\" : \"PERSONA_FISICA\",\r\n\t\"Bonta_Dati__c\" : \"Full\",\r\n\t\"Canale__c\" : \"WEB\",\r\n\t\"CAP_Fatturazione__c\" : \"12345\",\r\n\t\"CAP_fornitura__c\" : \"12345\",\r\n\t\"CAP_Residenza__c\" : \"12345\",\r\n\t\"CAP_Spedizione__c\" : \"12345\",\r\n\t\"Civico_Fatturazione__c\" : \"1\",\r\n\t\"Civico_Fornitura__c\" : \"1\",\r\n\t\"Civico_Residenza__c\" : \"1\",\r\n\t\"Civico_Spedizione__c\" : \"1\",\r\n\t\"Codice_Fiscale__c\" : \""+cf+"\",\r\n\t\"Codice_Listino__c\" : \""+codicePricing+"\",\r\n\t\"Comune_di_Nascita__c\" : \"Napoli\",\r\n\t\"Comune_Fatturazione__c\" : \"Napoli\",\r\n\t\"Comune_Fornitura__c\" : \"Napoli\",\r\n\t\"Comune_Residenza__c\" : \"Napoli\",\r\n\t\"Comune_Spedizione__c\" :\"Napoli\",\r\n\t\"Coordinate_Conto_Corrente_IBAN__c\" : \"AAAAAAAAAAAAAAAA\",\r\n\t\"Data_di_Nascita__c\" : \"1984-12-30\",\r\n\t\"Data_Documento_Identita__c\" : \"2017-11-05\",\r\n\t\"Data_Ultima_Esecuzione_Credit_Check__c\" : \"2017-10-05\",\r\n\t\"Data_Ultimo_Pre_Check__c\" : \"2017-11-05\",\r\n\t\"Email__c\" : \"aaa@aaa.it\",\r\n\t\"Esito_Credit_Check__c\" : \"OK\",\r\n\t\"Esito_Pre_Check__c\" : \"OK\",\r\n\t\"First_Name__c\" : \""+name+"\",\r\n\t\"Frazione_Fatturazione__c\" : \"Napoli\",\r\n\t\"Frazione_Fornitura__c\" : \"Napoli\",\r\n\t\"Frazione_Residenza__c\" : \"Napoli\",\r\n\t\"Frazione_Spedizione__c\" : \"Napoli\",\r\n\t\"Intestatario_SDD__c\" : \""+name+" "+surname+"\",\r\n\t\"ISTAT_Fatturazione__c\" : \"0\",\r\n\t\"ISTAT_Fornitura__c\" : \"0\",\r\n\t\"ISTAT_recapito__c\" : \"0\",\r\n\t\"ISTAT_Spedizione__c\" : \"0\",\r\n\t\"Last_Name__c\" : \""+surname+"\",\r\n\t\"Metodo_di_Pagamento__c\" : \"Bollettino\",\r\n\t\"MobilePhone__c\" : \"01236547896\",\r\n\t\"Modalita_di_Fatturazione__c\" : \"Bolletta WEB\",\r\n\t\"Metodo_di_pagamento__c\" : \"SDD\",\r\n\t\"Coordinate_conto_corrente_IBAN__c\" : \"IT28T787750071110001123424511\",\r\n\t\"Piano_Fatturazione__c\" : \"3\",\r\n\t\"Piano_Fornitura__c\" : \"3\",\r\n\t\"Piano_Residenza__c\" : \"3\",\r\n\t\"Piano_Spedizione__c\" : \"3\",\r\n\t\"Pod_PDR__c\" : \""+pod_pdr+"\",\r\n\t\"ProductCode__c\" : \"G_DO_IGWP\",\r\n\t\"Ragione_Sociale__c\" : \"SPA\",\r\n\t\"Stato_Lavorazione__c\" : \"Creato\",\r\n\t\"Step_Lavorazione__c\" : \"S1\",\r\n\t\"Toponimo_Fatturazione__c\" : \"VIA\",\r\n\t\"Toponimo_Fornitura__c\" : \"VIA\",\r\n\t\"Toponimo_Residenza__c\" : \"VIA\",\r\n\t\"Toponimo_Spedizione__c\" : \"VIA\",\r\n\t\"Via_Fatturazione__c\" : \"Pioppo\",\r\n\t\"Via_Fornitura__c\" : \"Pioppo\",\r\n\t\"Via_Residenza__c\" : \"Pioppo\",\r\n\t\"Via_Spedizione__c\" : \"Pioppo\",\r\n\t\"Tipo_documento_identita__c\" : \"CARTA IDENTITA'\",\r\n\t\"Numero_documento_identita__c\" : \"AN5011157\",\r\n\t\"Data_documento_identita__c\" : \"2017-05-05\",\r\n\t\"Account_Email__c\" : \"aaa@aaa.it\",\r\n\t\"provincia_residenza__c\" : \"Napoli\",\r\n\t\"scala_residenza__c\" : \"A\",\r\n\t\"interno_residenza__c\" : \"3\",\r\n\t\"presso_residenza__c\" : \"Narnia\",\r\n\t\"nazione_residenza__c\" : \"Italia\",\r\n\t\"provincia_spedizione__c\" : \"NA\",\r\n\t\"scala_spedizione__c\" : \"B\",\r\n\t\"interno_spedizione__c\" : \"4\",\r\n\t\"presso_spedizione__c\" : \"Mordor\",\r\n\t\"nazione_spedizione__c\" : \"Italia\",\r\n\t\"Phone__c\" : \"08144456987\",\r\n\t\"Consenso_trattamento_dati_fini_comm__c\" : \"true\",\r\n\t\"Consenso_cessione_dati_a_terzi__c\" : \"true\",\r\n\t\"Consensi_trattamenti_dati__c\" : \"true\",\r\n\t\"provincia_fatturazione__c\" : \"NA\",\r\n\t\"Modalita_di_fatturazione__c\" : \"\",\r\n\t\"provincia_fornitura__c\" : \"NA\",\r\n\t\"scala_fornitura__c\" : \"A\",\r\n\t\"interno_fornitura__c\" : \"3\",\r\n\t\"presso_fornitura__c\" : \"Narnia\",\r\n\t\"nazione_fornitura__c\" : \"Italia\",\r\n\t\"Stato_attivazione_metodo_pagamento__c\" : \"Attivo\",\r\n\t\"Causale_stato_attivazione__c\" : \"CdInms_SDD_001\",\r\n\t\"Conto_corrente_italiano__c\" : \"true\",\r\n\t\"Codice_BIC_SWIFT__c\" : \"221564564\"\r\n}");
+		var response = JSON.parse(xhttp.responseText);
+		//alert(response);
+		//$(".catalog_result").text(response.access_token);
+		//return (response.access_token);
+		console.log(response);
+	}
+
+</script>
+</body>
+</html>
