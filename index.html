@@ -152,8 +152,8 @@
 		//xhttp.setRequestHeader("Origin", "https://pippo.pippo.com");
 		//xhttp.setRequestHeader("Access-Control-Request-Headers", "Origin,Authorization,Content-type");
 		
-		xhttp.setRequestHeader("Access-Control-Request-Origin", "https://test.salesforce.com");
-		//xhttp.setRequestHeader("Access-Control-Allow-Origin", "https://pippo.pippo.com");
+		//xhttp.setRequestHeader("Access-Control-Request-Origin", "https://test.salesforce.com");
+		xhttp.setRequestHeader("Access-Control-Allow-Origin", "https://test.salesforce.com");
 		
 		xhttp.send("grant_type=password&client_secret=8245610559742033737&username=a.mc.allister@iren.dev02&password=amcallister1br71mfSeIlI4PMTaPOPkfPXY&client_id=3MVG9lcxCTdG2Vbt76OjTdSJpPZ7Z_5uGp0qDvZ51yxyC92ghKd6_ob4wa5tFWUifDEyP.sQpohHaEd2meoIO");
 		var response = JSON.parse(xhttp.responseText);
